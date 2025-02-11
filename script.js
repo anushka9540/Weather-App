@@ -10,15 +10,14 @@ const windValueText = document.querySelector('.wind-value-text');
 const pressureValueText = document.querySelector('.pressure-value-text');
 const feelsValueText = document.querySelector('.feels-value-text');
 const forecastItems = document.querySelector('.forecast-item-container');
-
 const searchCityMessage = document.querySelector('.search-city');
 const notFoundMessage = document.querySelector('.not-found');
 const tryAgainButton = document.querySelector('.try-again');
 const loader = document.querySelector('.loader');
-
 const apiKey = '82005d27a116c2880c8f0fcb866998a0';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
+let lastSearchedCity = '';
 
 async function fetchWeatherData(url) {
   try {
@@ -34,21 +33,24 @@ async function fetchWeatherData(url) {
 function processWeatherData(data) {
   if (!data) {
     loader.style.display = 'none';
+    if (
+      !notFoundMessage.style.display ||
+      notFoundMessage.style.display === 'none'
+    ) {
+      searchCityMessage.style.display = 'none';
+      cityInput.style.display = 'none';
+      searchBtn.style.display = 'none';
+    }
     weatherInfo.style.display = 'none';
     notFoundMessage.style.display = 'block';
-    cityInput.style.display = 'none';
-    searchBtn.style.display = 'none';
     return;
   }
-
   loader.style.display = 'none';
   weatherInfo.style.display = 'block';
   searchCityMessage.style.display = 'none';
   notFoundMessage.style.display = 'none';
-
   cityInput.style.display = 'block';
   searchBtn.style.display = 'block';
-
   cityNameElement.textContent = `${data.name}, ${data.sys.country}`;
   tempText.textContent = `${Math.round(data.main.temp - 273.15)} °C`;
   conditionText.textContent = data.weather[0].description;
@@ -58,32 +60,29 @@ function processWeatherData(data) {
   feelsValueText.textContent = `${Math.round(
     data.main.feels_like - 273.15
   )} °C`;
-
   const iconCode = data.weather[0].icon;
   weatherSummaryImg.src = iconCode
     ? `icons/${iconCode}.png`
     : 'icons/default.png';
-
   getForecast(data.name);
 }
 
 function getWeatherByCity(cityName) {
+  cityName = cityName.toLowerCase();
+  if (cityName === lastSearchedCity) return;
+  lastSearchedCity = cityName;
   loader.style.display = 'block';
   weatherInfo.style.display = 'none';
-
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
   fetchWeatherData(url).then((data) => processWeatherData(data));
 }
 
 function getForecast(cityName) {
   const url = `${forecastUrl}?q=${cityName}&appid=${apiKey}`;
-
   fetchWeatherData(url).then((data) => {
     if (!data) return;
-
     forecastItems.style.display = 'flex';
     forecastItems.innerHTML = '';
-
     for (let i = 0; i < 4; i++) {
       const forecast = data.list[i * 8];
       const forecastDate = new Date(forecast.dt * 1000);
@@ -91,11 +90,9 @@ function getForecast(cityName) {
       const forecastIconCode = forecast.weather[0].icon;
       const forecastIconUrl = forecastIconCode
         ? `icons/${forecastIconCode}.png`
-        : 'icons/default.png';
-
+        : './icons/unknown.png';
       const forecastItem = document.createElement('div');
       forecastItem.classList.add('forecast-item');
-
       forecastItem.innerHTML = `
         <h5 class="forecast-item-date regular-text">${forecastDate.toLocaleDateString(
           'en-GB',
@@ -104,23 +101,24 @@ function getForecast(cityName) {
         <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img">
         <h5 class="forecast-item-temp">${forecastTemp} °C</h5>
       `;
-
       forecastItems.appendChild(forecastItem);
     }
   });
 }
 
 searchBtn.addEventListener('click', () => {
-  if (cityInput.value.trim() !== '') {
-    getWeatherByCity(cityInput.value.trim());
+  const cityName = cityInput.value.trim();
+  if (cityName !== '') {
+    getWeatherByCity(cityName);
     cityInput.value = '';
     cityInput.blur();
   }
 });
 
 cityInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && cityInput.value.trim() !== '') {
-    getWeatherByCity(cityInput.value.trim());
+  const cityName = cityInput.value.trim();
+  if (event.key === 'Enter' && cityName !== '') {
+    getWeatherByCity(cityName);
     cityInput.value = '';
     cityInput.blur();
   }
@@ -136,7 +134,6 @@ window.onload = () => {
 function getUserLocation() {
   loader.style.display = 'block';
   searchCityMessage.style.display = 'none';
-
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {

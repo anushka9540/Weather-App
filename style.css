@@ -94,6 +94,7 @@ body::before {
     display: flex;
     align-items: center;
     gap: 9px;
+    margin: 0 auto;
 }
 
 .regular-text {
@@ -118,6 +119,31 @@ body::before {
     text-align: end;
 }
 
+.fa-arrows-down-to-line {
+    position: relative;
+    right: 15px;
+}
+
+.fa-temperature-three-quarters {
+    position: relative;
+    right: 10px;
+}
+
+.fa-droplet {
+    position: relative;
+    left: 5px;
+}
+
+.wind-value-text {
+    position: relative;
+    left: 22px;
+}
+
+.wnt {
+    position: relative;
+    left: 22px;
+}
+
 .weather-conditions-container {
     /* border: solid; */
     display: flex;
@@ -133,12 +159,18 @@ body::before {
     justify-content: space-between;
     margin-top: 20px;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
 }
 
 .condition-item i {
     font-size: 35px;
 }
+
+h5 {
+    position: relative;
+    left: 6px;
+}
+
 
 .forecast-item-img {
     width: 45px;
@@ -201,16 +233,6 @@ body::before {
     margin-top: 15%;
 }
 
-.forecast-btn {
-    background: transparent;
-    height: 30px;
-    width: 120px;
-    border: 2px solid #ffffff;
-    border-radius: 30px;
-    position: relative;
-    left: 120px;
-    top: 100px;
-}
 
 h4 {
     text-align: center;
@@ -226,6 +248,7 @@ h4 {
     padding: 8px;
     border-radius: 30px;
     margin-top: 30px;
+    cursor: pointer;
 }
 
 .loader {
