@@ -49,35 +49,22 @@ function processWeatherData(data) {
   cityInput.style.display = 'block';
   searchBtn.style.display = 'block';
 
-  const city = data.name;
-  const country = data.sys.country;
-  const temperatureKelvin = data.main.temp;
-  const description = data.weather[0].description;
-  const humidity = data.main.humidity;
-  const windSpeed = data.wind.speed;
-  const pressure = data.main.pressure;
-  const feelsLike = data.main.feels_like;
+  cityNameElement.textContent = `${data.name}, ${data.sys.country}`;
+  tempText.textContent = `${Math.round(data.main.temp - 273.15)} °C`;
+  conditionText.textContent = data.weather[0].description;
+  humidityValueText.textContent = `${data.main.humidity}%`;
+  windValueText.textContent = `${data.wind.speed} m/s`;
+  pressureValueText.textContent = `${data.main.pressure} hPa`;
+  feelsValueText.textContent = `${Math.round(
+    data.main.feels_like - 273.15
+  )} °C`;
 
   const iconCode = data.weather[0].icon;
-  const weatherIconUrl = `icons/${iconCode}.png`;
+  weatherSummaryImg.src = iconCode
+    ? `icons/${iconCode}.png`
+    : 'icons/default.png';
 
-  const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
-  const feelsLikeCelsius = Math.round(feelsLike - 273.15);
-
-  cityNameElement.textContent = `${city}, ${country}`;
-  tempText.textContent = `${temperatureCelsius} °C`;
-  conditionText.textContent = description;
-  humidityValueText.textContent = `${humidity}%`;
-  windValueText.textContent = `${windSpeed} m/s`;
-  pressureValueText.textContent = `${pressure} hPa`;
-  feelsValueText.textContent = `${feelsLikeCelsius} °C`;
-
-  weatherSummaryImg.src = weatherIconUrl;
-  weatherSummaryImg.onerror = () => {
-    weatherSummaryImg.src = './icons/unknown.png'; // Default icon
-  };
-
-  getForecast(city);
+  getForecast(data.name);
 }
 
 function getWeatherByCity(cityName) {
@@ -85,7 +72,6 @@ function getWeatherByCity(cityName) {
   weatherInfo.style.display = 'none';
 
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
-
   fetchWeatherData(url).then((data) => processWeatherData(data));
 }
 
@@ -100,11 +86,12 @@ function getForecast(cityName) {
 
     for (let i = 0; i < 4; i++) {
       const forecast = data.list[i * 8];
-
       const forecastDate = new Date(forecast.dt * 1000);
       const forecastTemp = Math.round(forecast.main.temp - 273.15);
       const forecastIconCode = forecast.weather[0].icon;
-      const forecastIconUrl = `icons/${forecastIconCode}.png`;
+      const forecastIconUrl = forecastIconCode
+        ? `icons/${forecastIconCode}.png`
+        : 'icons/default.png';
 
       const forecastItem = document.createElement('div');
       forecastItem.classList.add('forecast-item');
@@ -112,13 +99,9 @@ function getForecast(cityName) {
       forecastItem.innerHTML = `
         <h5 class="forecast-item-date regular-text">${forecastDate.toLocaleDateString(
           'en-GB',
-          {
-            weekday: 'short',
-            day: 'numeric',
-            month: 'short'
-          }
+          { weekday: 'short', day: 'numeric', month: 'short' }
         )}</h5>
-        <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img" onerror="this.src='icons/default.png'">
+        <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img">
         <h5 class="forecast-item-temp">${forecastTemp} °C</h5>
       `;
 
@@ -180,7 +163,6 @@ function getUserLocation() {
 
 function getWeatherByCoordinates(latitude, longitude) {
   const url = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
-
   fetchWeatherData(url).then((data) => processWeatherData(data));
 }
 
