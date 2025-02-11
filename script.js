@@ -19,18 +19,35 @@ const apiKey = '82005d27a116c2880c8f0fcb866998a0';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
+
+const weatherIcons = {
+    clear : '01d.png',
+    clouds: '04d.png',
+    rain: '09d.png',
+    drizzle: '10d.png',
+    thunderstorm: '11d.png',
+    snow: '13d.png',
+    mist: '50d.png',
+    smoke: '10n.png',
+    haze: '02d.png',
+    fog: '09n.png',
+    sand: '02n.png',
+    ash: '03d.png',
+    broken : '02d.png',
+    squall: 'unknown.png',
+};
+
+
 function getWeatherByCity(cityName) {
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-
       weatherInfo.style.display = 'block';
       searchCityMessage.style.display = 'none';
       notFoundMessage.style.display = 'none';
 
-      
       cityInput.style.display = 'block';
       searchBtn.style.display = 'block';
 
@@ -42,7 +59,27 @@ function getWeatherByCity(cityName) {
       const windSpeed = data.wind.speed;
       const pressure = data.main.pressure;
       const feelsLike = data.main.feels_like;
-      const icon = data.weather[0].icon;
+      
+      
+      console.log("Weather description:", description);  
+
+      
+      let weatherCondition = description.split(' ')[0].toLowerCase(); // it divide the word nd give like clear sky to clear
+      
+        // if any condn have light and heavy it will give acc to this
+      if (description.includes("clouds")) {
+        weatherCondition = "clouds"; // means that ki light cloud = cloud
+      } else if (description.includes("rain")) {
+        weatherCondition = "rain"; 
+      } else if (description.includes("snow")) {
+        weatherCondition = "snow"; 
+      }
+      
+      console.log("Extracted weather condition:", weatherCondition);  // whatever which comes clear sky then it will show clear only
+
+     
+      const weatherIcon = weatherIcons[weatherCondition] || 'unknown.png';
+      console.log("Mapped weather icon:", weatherIcon);  
 
       const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
       const feelsLikeCelsius = Math.round(feelsLike - 273.15);
@@ -55,7 +92,8 @@ function getWeatherByCity(cityName) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      weatherSummaryImg.src = `http://openweathermap.org/img/wn/${icon}.png`;
+      // Set my weather icon
+      weatherSummaryImg.src = `icons/${weatherIcon}`;
 
       getForecast(cityName);
     })
@@ -64,7 +102,6 @@ function getWeatherByCity(cityName) {
       weatherInfo.style.display = 'none';
       notFoundMessage.style.display = 'block';
 
-     
       cityInput.style.display = 'none';
       searchBtn.style.display = 'none';
     });
@@ -84,16 +121,19 @@ function getForecast(cityName) {
 
         const forecastDate = new Date(forecast.dt * 1000);
         const forecastTemp = Math.round(forecast.main.temp - 273.15);
-        const forecastIcon = forecast.weather[0].icon;
+        const forecastCondition = forecast.weather[0].description.split(' ')[0];
+        const forecastIcon = weatherIcons[forecastCondition] || 'unknown.png';
 
         const forecastItem = document.createElement('div');
         forecastItem.classList.add('forecast-item');
+
+        console.log("Forecast icon:", forecastIcon); 
 
         forecastItem.innerHTML = `
           <h5 class="forecast-item-date regular-text">${forecastDate.toLocaleDateString('en-GB', {
             weekday: 'short', day: 'numeric', month: 'short'
           })}</h5>
-          <img src="http://openweathermap.org/img/wn/${forecastIcon}.png" alt="" class="forecast-item-img">
+          <img src="icons/${forecastIcon}" alt="" class="forecast-item-img">
           <h5 class="forecast-item-temp">${forecastTemp} °C</h5>
         `;
 
@@ -131,6 +171,7 @@ window.onload = () => {
   getUserLocation();
 };
 
+
 function getUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -143,13 +184,15 @@ function getUserLocation() {
       (error) => {
         console.error('Geolocation error:', error);
         weatherInfo.style.display = 'none';
-        searchCityMessage.style.display = 'block';
-
+        notFoundMessage.style.display = 'none';
         
-        notFoundMessage.style.display = 'block';
-        searchCityMessage.style.display = 'none';
-        cityInput.style.display = 'none';
-        searchBtn.style.display = 'none';
+      
+        searchCityMessage.style.display = 'block';
+        cityInput.style.display = 'block';
+        searchBtn.style.display = 'block';
+
+        // Optional
+        alert("Location access was denied. Please enter a city name to search.");
       }
     );
   } else {
@@ -163,12 +206,10 @@ function getWeatherByCoordinates(latitude, longitude) {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-
       weatherInfo.style.display = 'block';
       searchCityMessage.style.display = 'none';
       notFoundMessage.style.display = 'none';
 
-      
       cityInput.style.display = 'block';
       searchBtn.style.display = 'block';
 
@@ -180,7 +221,17 @@ function getWeatherByCoordinates(latitude, longitude) {
       const windSpeed = data.wind.speed;
       const pressure = data.main.pressure;
       const feelsLike = data.main.feels_like;
-      const icon = data.weather[0].icon;
+      
+      
+      let weatherCondition = description.split(' ')[0];
+      if (description.includes('clouds')) {
+        weatherCondition = 'Clouds';  
+      }
+      console.log("Weather condition:", weatherCondition);  
+
+      
+      const weatherIcon = weatherIcons[weatherCondition] || 'unknown.png';
+      console.log("Weather icon:", weatherIcon);  
 
       const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
       const feelsLikeCelsius = Math.round(feelsLike - 273.15);
@@ -193,7 +244,8 @@ function getWeatherByCoordinates(latitude, longitude) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      weatherSummaryImg.src = `http://openweathermap.org/img/wn/${icon}.png`;
+      // Set the icon
+      weatherSummaryImg.src = `icons/${weatherIcon}`;
 
       getForecast(city);
     })
@@ -202,22 +254,17 @@ function getWeatherByCoordinates(latitude, longitude) {
       weatherInfo.style.display = 'none';
       notFoundMessage.style.display = 'block';
 
-      
       cityInput.style.display = 'none';
       searchBtn.style.display = 'none';
     });
 }
 
-
 tryAgainButton.addEventListener('click', () => {
-
   notFoundMessage.style.display = 'none';
   searchCityMessage.style.display = 'block';
 
-  
   cityInput.style.display = 'block';
   searchBtn.style.display = 'block';
-
 
   cityInput.value = '';
   cityInput.focus();
