@@ -171,6 +171,9 @@ window.onload = () => {
 };
 
 function getUserLocation() {
+  loader.style.display = 'block'; // Show loader initially
+  searchCityMessage.style.display = 'none';
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -180,6 +183,7 @@ function getUserLocation() {
         getWeatherByCoordinates(latitude, longitude);
       },
       (error) => {
+        loader.style.display = 'none'; // Hide loader if location access fails
         console.error('Geolocation error:', error);
         weatherInfo.style.display = 'none';
         notFoundMessage.style.display = 'none';
@@ -194,6 +198,7 @@ function getUserLocation() {
       }
     );
   } else {
+    loader.style.display = 'none'; // Hide loader if geolocation is unsupported
     alert('Geolocation is not supported by this browser.');
   }
 }
