@@ -20,7 +20,6 @@ const apiKey = '82005d27a116c2880c8f0fcb866998a0';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
-// Reusable function to fetch weather data
 async function fetchWeatherData(url) {
   try {
     const response = await fetch(url);
@@ -32,57 +31,62 @@ async function fetchWeatherData(url) {
   }
 }
 
+function processWeatherData(data) {
+  if (!data) {
+    loader.style.display = 'none';
+    weatherInfo.style.display = 'none';
+    notFoundMessage.style.display = 'block';
+    cityInput.style.display = 'none';
+    searchBtn.style.display = 'none';
+    return;
+  }
+
+  loader.style.display = 'none';
+  weatherInfo.style.display = 'block';
+  searchCityMessage.style.display = 'none';
+  notFoundMessage.style.display = 'none';
+
+  cityInput.style.display = 'block';
+  searchBtn.style.display = 'block';
+
+  const city = data.name;
+  const country = data.sys.country;
+  const temperatureKelvin = data.main.temp;
+  const description = data.weather[0].description;
+  const humidity = data.main.humidity;
+  const windSpeed = data.wind.speed;
+  const pressure = data.main.pressure;
+  const feelsLike = data.main.feels_like;
+
+  const iconCode = data.weather[0].icon;
+  const weatherIconUrl = `icons/${iconCode}.png`;
+
+  const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
+  const feelsLikeCelsius = Math.round(feelsLike - 273.15);
+
+  cityNameElement.textContent = `${city}, ${country}`;
+  tempText.textContent = `${temperatureCelsius} °C`;
+  conditionText.textContent = description;
+  humidityValueText.textContent = `${humidity}%`;
+  windValueText.textContent = `${windSpeed} m/s`;
+  pressureValueText.textContent = `${pressure} hPa`;
+  feelsValueText.textContent = `${feelsLikeCelsius} °C`;
+
+  weatherSummaryImg.src = weatherIconUrl;
+  weatherSummaryImg.onerror = () => {
+    weatherSummaryImg.src = './icons/unknown.png'; // Default icon
+  };
+
+  getForecast(city);
+}
+
 function getWeatherByCity(cityName) {
   loader.style.display = 'block';
   weatherInfo.style.display = 'none';
 
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
 
-  fetchWeatherData(url).then((data) => {
-    if (!data) {
-      loader.style.display = 'none';
-      weatherInfo.style.display = 'none';
-      notFoundMessage.style.display = 'block';
-      cityInput.style.display = 'none';
-      searchBtn.style.display = 'none';
-      return;
-    }
-
-    loader.style.display = 'none';
-    weatherInfo.style.display = 'block';
-    searchCityMessage.style.display = 'none';
-    notFoundMessage.style.display = 'none';
-
-    cityInput.style.display = 'block';
-    searchBtn.style.display = 'block';
-
-    const city = data.name;
-    const country = data.sys.country;
-    const temperatureKelvin = data.main.temp;
-    const description = data.weather[0].description;
-    const humidity = data.main.humidity;
-    const windSpeed = data.wind.speed;
-    const pressure = data.main.pressure;
-    const feelsLike = data.main.feels_like;
-
-    const iconCode = data.weather[0].icon;
-    const weatherIconUrl = `icons/${iconCode}.png`;
-
-    const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
-    const feelsLikeCelsius = Math.round(feelsLike - 273.15);
-
-    cityNameElement.textContent = `${city}, ${country}`;
-    tempText.textContent = `${temperatureCelsius} °C`;
-    conditionText.textContent = description;
-    humidityValueText.textContent = `${humidity}%`;
-    windValueText.textContent = `${windSpeed} m/s`;
-    pressureValueText.textContent = `${pressure} hPa`;
-    feelsValueText.textContent = `${feelsLikeCelsius} °C`;
-
-    weatherSummaryImg.src = weatherIconUrl;
-
-    getForecast(cityName);
-  });
+  fetchWeatherData(url).then((data) => processWeatherData(data));
 }
 
 function getForecast(cityName) {
@@ -114,7 +118,7 @@ function getForecast(cityName) {
             month: 'short'
           }
         )}</h5>
-        <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img">
+        <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img" onerror="this.src='icons/default.png'">
         <h5 class="forecast-item-temp">${forecastTemp} °C</h5>
       `;
 
@@ -177,15 +181,7 @@ function getUserLocation() {
 function getWeatherByCoordinates(latitude, longitude) {
   const url = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
 
-  fetchWeatherData(url).then((data) => {
-    if (!data) {
-      loader.style.display = 'none';
-      weatherInfo.style.display = 'none';
-      notFoundMessage.style.display = 'block';
-      return;
-    }
-    getWeatherByCity(data.name);
-  });
+  fetchWeatherData(url).then((data) => processWeatherData(data));
 }
 
 tryAgainButton.addEventListener('click', () => {
