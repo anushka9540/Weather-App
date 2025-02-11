@@ -16,8 +16,8 @@ const notFoundMessage = document.querySelector('.not-found');
 const tryAgainButton = document.querySelector('.try-again'); // Button to try again
 
 const apiKey = '82005d27a116c2880c8f0fcb866998a0';
-const apiUrl = 'http://api.openweathermap.org/data/2.5/weather';
-const forecastUrl = 'http://api.openweathermap.org/data/2.5/forecast';
+const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
 function getWeatherByCity(cityName) {
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
