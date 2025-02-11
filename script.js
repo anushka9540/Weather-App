@@ -13,7 +13,8 @@ const forecastItems = document.querySelector('.forecast-item-container');
 
 const searchCityMessage = document.querySelector('.search-city');
 const notFoundMessage = document.querySelector('.not-found');
-const tryAgainButton = document.querySelector('.try-again'); // Button to try again
+const tryAgainButton = document.querySelector('.try-again');
+const loader = document.querySelector('.loader');
 
 const apiKey = '82005d27a116c2880c8f0fcb866998a0';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
@@ -41,11 +42,15 @@ const weatherIcons = {
 };
 
 function getWeatherByCity(cityName) {
+  loader.style.display = 'block';
+  weatherInfo.style.display = 'none';
+
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
+      loader.style.display = 'none';
       weatherInfo.style.display = 'block';
       searchCityMessage.style.display = 'none';
       notFoundMessage.style.display = 'none';
@@ -79,18 +84,18 @@ function getWeatherByCity(cityName) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      // Set the custom icon based on the mapped icon code
       weatherSummaryImg.src = weatherIconUrl;
 
       getForecast(cityName);
     })
     .catch((error) => {
-      console.error('Error fetching weather data for city:', error);
+      loader.style.display = 'none';
       weatherInfo.style.display = 'none';
       notFoundMessage.style.display = 'block';
 
       cityInput.style.display = 'none';
       searchBtn.style.display = 'none';
+      console.error('Error fetching weather data for city:', error);
     });
 }
 
@@ -114,6 +119,7 @@ function getForecast(cityName) {
         const forecastIcon = weatherIcons[forecastIconCode] || 'unknown.png';
 
         const forecastIconUrl = `icons/${forecastIcon}`;
+
         const forecastItem = document.createElement('div');
         forecastItem.classList.add('forecast-item');
 
@@ -198,6 +204,7 @@ function getWeatherByCoordinates(latitude, longitude) {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
+      loader.style.display = 'none';
       weatherInfo.style.display = 'block';
       searchCityMessage.style.display = 'none';
       notFoundMessage.style.display = 'none';
@@ -218,7 +225,7 @@ function getWeatherByCoordinates(latitude, longitude) {
 
       const weatherIcon = weatherIcons[iconCode] || 'unknown.png';
 
-      const weatherIconUrl = `icons/${weatherIcon}`; // Path to our custom icons
+      const weatherIconUrl = `icons/${weatherIcon}`;
 
       const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
       const feelsLikeCelsius = Math.round(feelsLike - 273.15);
@@ -231,22 +238,21 @@ function getWeatherByCoordinates(latitude, longitude) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      // Set the custom icon based on the mapped icon code
       weatherSummaryImg.src = weatherIconUrl;
 
       getForecast(city);
     })
     .catch((error) => {
-      console.error('Error fetching weather data for current location:', error);
+      loader.style.display = 'none';
       weatherInfo.style.display = 'none';
       notFoundMessage.style.display = 'block';
 
       cityInput.style.display = 'none';
       searchBtn.style.display = 'none';
+      console.error('Error fetching weather data for current location:', error);
     });
 }
 
-// Try again button functionality
 tryAgainButton.addEventListener('click', () => {
   notFoundMessage.style.display = 'none';
   searchCityMessage.style.display = 'block';
