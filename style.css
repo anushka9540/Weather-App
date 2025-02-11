@@ -38,7 +38,7 @@ body::before {
     padding: 20px;
 }
 
-.input-container{
+.input-container {
     position: relative;
     margin-bottom: 25px;
 }
@@ -63,7 +63,7 @@ body::before {
     color: #ffffff;
 }
 
-.search-btn{
+.search-btn {
     position: absolute;
     right: 16px;
     top: 24%;
@@ -73,7 +73,7 @@ body::before {
     cursor: pointer;
 }
 
-.weather-info{
+.weather-info {
     /* border: solid; */
     display: flex;
     flex-direction: column;
@@ -81,7 +81,7 @@ body::before {
 
 }
 
-.location-date-container{
+.location-date-container {
     /* border: solid blue; */
     display: flex;
     justify-content: space-between;
@@ -89,44 +89,44 @@ body::before {
 
 }
 
-.location{
+.location {
     /* border: solid green; */
     display: flex;
     align-items: center;
     gap: 9px;
 }
 
-.regular-text{
+.regular-text {
     font-weight: 400;
 }
 
-.weather-summary-container{
+.weather-summary-container {
     /* border: solid; */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.weather-summary-img{
+.weather-summary-img {
     width: 120px;
     /* border: solid; */
     height: 120px;
 
 }
 
-.weather-summary-info{
+.weather-summary-info {
     text-align: end;
 }
 
-.weather-conditions-container{
+.weather-conditions-container {
     /* border: solid; */
     display: flex;
     justify-content: space-between;
     margin-top: -20px;
-    
+
 }
 
-.condition-item{
+.condition-item {
     /* border: solid; */
     display: flex;
     flex-direction: row;
@@ -136,41 +136,41 @@ body::before {
     gap: 10px;
 }
 
-.condition-item i{
+.condition-item i {
     font-size: 35px;
-} 
+}
 
-.forecast-item-img{
+.forecast-item-img {
     width: 45px;
     height: 45px;
 
 }
 
-.forecast-item-container{
+.forecast-item-container {
     display: flex;
     gap: 15px;
     overflow: scroll;
     margin-top: 25px;
-    padding-bottom:12px;
+    padding-bottom: 12px;
     padding-right: 12px;
 }
 
-.forecast-item-container::-webkit-scrollbar{
+.forecast-item-container::-webkit-scrollbar {
     height: 8px;
     width: 0px;
 }
 
-.forecast-item-container::-webkit-scrollbar-track{
+.forecast-item-container::-webkit-scrollbar-track {
     background: rgb(0, 0, 0, 0.1);
     border-radius: 100px;
 }
 
-.forecast-item-container::-webkit-scrollbar-thumb{
+.forecast-item-container::-webkit-scrollbar-thumb {
     background: rgb(0, 0, 0, 0.15);
     border-radius: 100px;
 }
 
-.forecast-item{
+.forecast-item {
     /* border: solid; */
     min-height: 40px;
     min-width: 90px;
@@ -184,15 +184,15 @@ body::before {
     transition: 0.3s;
 }
 
-.forecast-item:hover{
+.forecast-item:hover {
     background: rgb(255, 255, 255, 0.15);
 }
 
-.section-message img{
+.section-message img {
     width: 250px;
 }
 
-.section-message{
+.section-message {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -201,7 +201,7 @@ body::before {
     margin-top: 15%;
 }
 
-.forecast-btn{
+.forecast-btn {
     background: transparent;
     height: 30px;
     width: 120px;
@@ -212,7 +212,7 @@ body::before {
     top: 100px;
 }
 
-h4{
+h4 {
     text-align: center;
     margin-top: 30px;
     border: 1px solid #ffffff;
@@ -220,7 +220,7 @@ h4{
     padding: 5px;
 }
 
-.try-again{
+.try-again {
     background: transparent;
     border: 2px solid #ffffff;
     padding: 8px;

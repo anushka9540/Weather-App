@@ -19,24 +19,26 @@ const apiKey = '82005d27a116c2880c8f0fcb866998a0';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
-
 const weatherIcons = {
-    clear : '01d.png',
-    clouds: '04d.png',
-    rain: '09d.png',
-    drizzle: '10d.png',
-    thunderstorm: '11d.png',
-    snow: '13d.png',
-    mist: '50d.png',
-    smoke: '10n.png',
-    haze: '02d.png',
-    fog: '09n.png',
-    sand: '02n.png',
-    ash: '03d.png',
-    broken : '02d.png',
-    squall: 'unknown.png',
+  '01d': '01d.png',
+  '01n': '01n.png',
+  '02d': '02d.png',
+  '02n': '02n.png',
+  '03d': '03d.png',
+  '03n': '03n.png',
+  '04d': '04d.png',
+  '04n': '04n.png',
+  '09d': '09d.png',
+  '09n': '09n.png',
+  '10d': '10d.png',
+  '10n': '10n.png',
+  '11d': '11d.png',
+  '11n': '11n.png',
+  '13d': '13d.png',
+  '13n': '13n.png',
+  '50d': '50d.png',
+  '50n': '50n.png'
 };
-
 
 function getWeatherByCity(cityName) {
   const url = `${apiUrl}?q=${cityName}&appid=${apiKey}`;
@@ -59,27 +61,12 @@ function getWeatherByCity(cityName) {
       const windSpeed = data.wind.speed;
       const pressure = data.main.pressure;
       const feelsLike = data.main.feels_like;
-      
-      
-      console.log("Weather description:", description);  
 
-      
-      let weatherCondition = description.split(' ')[0].toLowerCase(); // it divide the word nd give like clear sky to clear
-      
-        // if any condn have light and heavy it will give acc to this
-      if (description.includes("clouds")) {
-        weatherCondition = "clouds"; // means that ki light cloud = cloud
-      } else if (description.includes("rain")) {
-        weatherCondition = "rain"; 
-      } else if (description.includes("snow")) {
-        weatherCondition = "snow"; 
-      }
-      
-      console.log("Extracted weather condition:", weatherCondition);  // whatever which comes clear sky then it will show clear only
+      const iconCode = data.weather[0].icon;
 
-     
-      const weatherIcon = weatherIcons[weatherCondition] || 'unknown.png';
-      console.log("Mapped weather icon:", weatherIcon);  
+      const weatherIcon = weatherIcons[iconCode] || 'unknown.png';
+
+      const weatherIconUrl = `icons/${weatherIcon}`;
 
       const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
       const feelsLikeCelsius = Math.round(feelsLike - 273.15);
@@ -92,8 +79,8 @@ function getWeatherByCity(cityName) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      // Set my weather icon
-      weatherSummaryImg.src = `icons/${weatherIcon}`;
+      // Set the custom icon based on the mapped icon code
+      weatherSummaryImg.src = weatherIconUrl;
 
       getForecast(cityName);
     })
@@ -121,19 +108,25 @@ function getForecast(cityName) {
 
         const forecastDate = new Date(forecast.dt * 1000);
         const forecastTemp = Math.round(forecast.main.temp - 273.15);
-        const forecastCondition = forecast.weather[0].description.split(' ')[0];
-        const forecastIcon = weatherIcons[forecastCondition] || 'unknown.png';
+        const forecastDescription = forecast.weather[0].description;
+        const forecastIconCode = forecast.weather[0].icon;
 
+        const forecastIcon = weatherIcons[forecastIconCode] || 'unknown.png';
+
+        const forecastIconUrl = `icons/${forecastIcon}`;
         const forecastItem = document.createElement('div');
         forecastItem.classList.add('forecast-item');
 
-        console.log("Forecast icon:", forecastIcon); 
-
         forecastItem.innerHTML = `
-          <h5 class="forecast-item-date regular-text">${forecastDate.toLocaleDateString('en-GB', {
-            weekday: 'short', day: 'numeric', month: 'short'
-          })}</h5>
-          <img src="icons/${forecastIcon}" alt="" class="forecast-item-img">
+          <h5 class="forecast-item-date regular-text">${forecastDate.toLocaleDateString(
+            'en-GB',
+            {
+              weekday: 'short',
+              day: 'numeric',
+              month: 'short'
+            }
+          )}</h5>
+          <img src="${forecastIconUrl}" alt="Weather icon" class="forecast-item-img">
           <h5 class="forecast-item-temp">${forecastTemp} °C</h5>
         `;
 
@@ -171,7 +164,6 @@ window.onload = () => {
   getUserLocation();
 };
 
-
 function getUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -185,14 +177,14 @@ function getUserLocation() {
         console.error('Geolocation error:', error);
         weatherInfo.style.display = 'none';
         notFoundMessage.style.display = 'none';
-        
-      
+
         searchCityMessage.style.display = 'block';
         cityInput.style.display = 'block';
         searchBtn.style.display = 'block';
 
-        // Optional
-        alert("Location access was denied. Please enter a city name to search.");
+        alert(
+          'Location access was denied. Please enter a city name to search.'
+        );
       }
     );
   } else {
@@ -221,17 +213,12 @@ function getWeatherByCoordinates(latitude, longitude) {
       const windSpeed = data.wind.speed;
       const pressure = data.main.pressure;
       const feelsLike = data.main.feels_like;
-      
-      
-      let weatherCondition = description.split(' ')[0];
-      if (description.includes('clouds')) {
-        weatherCondition = 'Clouds';  
-      }
-      console.log("Weather condition:", weatherCondition);  
 
-      
-      const weatherIcon = weatherIcons[weatherCondition] || 'unknown.png';
-      console.log("Weather icon:", weatherIcon);  
+      const iconCode = data.weather[0].icon;
+
+      const weatherIcon = weatherIcons[iconCode] || 'unknown.png';
+
+      const weatherIconUrl = `icons/${weatherIcon}`; // Path to our custom icons
 
       const temperatureCelsius = Math.round(temperatureKelvin - 273.15);
       const feelsLikeCelsius = Math.round(feelsLike - 273.15);
@@ -244,8 +231,8 @@ function getWeatherByCoordinates(latitude, longitude) {
       pressureValueText.textContent = `${pressure} hPa`;
       feelsValueText.textContent = `${feelsLikeCelsius} °C`;
 
-      // Set the icon
-      weatherSummaryImg.src = `icons/${weatherIcon}`;
+      // Set the custom icon based on the mapped icon code
+      weatherSummaryImg.src = weatherIconUrl;
 
       getForecast(city);
     })
@@ -259,6 +246,7 @@ function getWeatherByCoordinates(latitude, longitude) {
     });
 }
 
+// Try again button functionality
 tryAgainButton.addEventListener('click', () => {
   notFoundMessage.style.display = 'none';
   searchCityMessage.style.display = 'block';
