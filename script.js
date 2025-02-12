@@ -43,14 +43,18 @@ function processWeatherData(data) {
     }
     weatherInfo.style.display = 'none';
     notFoundMessage.style.display = 'block';
+
+    document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
     return;
   }
+
   loader.style.display = 'none';
   weatherInfo.style.display = 'block';
   searchCityMessage.style.display = 'none';
   notFoundMessage.style.display = 'none';
   cityInput.style.display = 'block';
   searchBtn.style.display = 'block';
+
   cityNameElement.textContent = `${data.name}, ${data.sys.country}`;
   tempText.textContent = `${Math.round(data.main.temp - 273.15)} °C`;
   conditionText.textContent = data.weather[0].description;
@@ -60,10 +64,22 @@ function processWeatherData(data) {
   feelsValueText.textContent = `${Math.round(
     data.main.feels_like - 273.15
   )} °C`;
+
   const iconCode = data.weather[0].icon;
   weatherSummaryImg.src = iconCode
     ? `icons/${iconCode}.png`
     : 'icons/default.png';
+
+  const currentTime = data.dt + data.timezone;
+  const sunrise = data.sys.sunrise + data.timezone;
+  const sunset = data.sys.sunset + data.timezone;
+
+  if (currentTime >= sunrise && currentTime < sunset) {
+    document.body.style.backgroundImage = "url('./images/day.jpg')";
+  } else {
+    document.body.style.backgroundImage = "url('./images/night.png')";
+  }
+
   getForecast(data.name);
 }
 
@@ -125,6 +141,7 @@ cityInput.addEventListener('keydown', (event) => {
 });
 
 window.onload = () => {
+  document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
   weatherInfo.style.display = 'none';
   searchCityMessage.style.display = 'block';
   notFoundMessage.style.display = 'none';
@@ -185,51 +202,3 @@ function formatDate(date) {
 const currentDate = new Date();
 
 document.getElementById('current-date').textContent = formatDate(currentDate);
-
-async function setDynamicBackground() {
-  document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
-
-  try {
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-
-    const response = await fetch(
-      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`
-    );
-    const data = await response.json();
-
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    const sunriseLocal = new Date(data.results.sunrise).toLocaleString(
-      'en-US',
-      { timeZone }
-    );
-    const sunsetLocal = new Date(data.results.sunset).toLocaleString('en-US', {
-      timeZone
-    });
-    const nowLocal = new Date().toLocaleString('en-US', { timeZone });
-
-    const sunriseTime = new Date(sunriseLocal);
-    const sunsetTime = new Date(sunsetLocal);
-    const nowTime = new Date(nowLocal);
-
-    console.log("User's Time Zone:", timeZone);
-    console.log('Current Time (Local):', nowTime);
-    console.log('Sunrise Time (Local):', sunriseTime);
-    console.log('Sunset Time (Local):', sunsetTime);
-
-    if (nowTime >= sunriseTime && nowTime < sunsetTime) {
-      document.body.style.backgroundImage = "url('./images/day.jpg')";
-    } else {
-      document.body.style.backgroundImage = "url('./images/night.png')";
-    }
-  } catch (error) {
-    console.error('Error getting location or fetching data:', error);
-  }
-}
-
-setDynamicBackground();

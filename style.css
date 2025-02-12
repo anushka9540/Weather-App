@@ -123,7 +123,7 @@ body::before {
     text-align: end;
 }
 
-.humiwin{
+.humiwin {
     /* border: 1px solid ; */
     display: flex;
     /* justify-content: space-between; */
@@ -131,7 +131,7 @@ body::before {
     gap: 240px;
 }
 
-.prefel{
+.prefel {
     /* border: 1px solid; */
     display: flex;
     /* justify-content: space-between; */
@@ -139,20 +139,20 @@ body::before {
     gap: 240px;
 }
 
-.weather-conditions-container{
+.weather-conditions-container {
     /* border: 3px solid black; */
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.condition-info{
+.condition-info {
     display: flex;
     flex-direction: column;
 
 }
 
-.condition-item{
+.condition-item {
     display: flex;
     gap: 15px;
     flex-direction: column;
