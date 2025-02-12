@@ -118,79 +118,45 @@ body::before {
 
 }
 
-.pressure-value-text {
-    position: relative;
-    left: 0.8px;
-}
-
-.pre {
-    position: relative;
-    left: 0.8px;
-}
 
 .weather-summary-info {
     text-align: end;
 }
 
-.fa-arrows-down-to-line {
-    position: relative;
-    right: 18px;
-}
-
-.fa-temperature-three-quarters {
-    position: relative;
-    right: 10px;
-}
-
-.fa-droplet {
-    position: relative;
-    left: 10px;
-}
-
-.fa-wind {
-    position: relative;
-    left: 5px;
-}
-
-.wind-value-text {
-    position: relative;
-    left: 20px;
-    font-weight: 400;
-}
-
-.wnt {
-    position: relative;
-    left: 20px;
-    font-weight: 400;
-}
-
-.weather-conditions-container {
-    /* border: solid; */
+.humiwin{
+    /* border: 1px solid ; */
     display: flex;
-    justify-content: space-between;
-    margin-top: -20px;
-
-}
-
-.condition-item {
-    /* border: solid; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 20px;
+    /* justify-content: space-between; */
     align-items: center;
-    gap: 9px;
+    gap: 240px;
 }
 
-.condition-item i {
-    font-size: 35px;
+.prefel{
+    /* border: 1px solid; */
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    gap: 240px;
 }
 
-h5 {
-    position: relative;
-    left: 6px;
+.weather-conditions-container{
+    /* border: 3px solid black; */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
+.condition-info{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.condition-item{
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
 
 .forecast-item-img {
     width: 45px;
@@ -202,7 +168,7 @@ h5 {
     display: flex;
     gap: 15px;
     overflow: scroll;
-    margin-top: 25px;
+    margin-top: 20px;
     padding-bottom: 12px;
     padding-right: 12px;
 }
@@ -256,7 +222,7 @@ h5 {
 
 h4 {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 15px;
     border: 1px solid #ffffff;
     border-radius: 30px;
     padding: 5px;
