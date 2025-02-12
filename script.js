@@ -173,12 +173,15 @@ tryAgainButton.addEventListener('click', () => {
 });
 
 function formatDate(date) {
-  const options = { weekday: 'short', day: 'numeric', month: 'short' };
+  const options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  };
   return date.toLocaleDateString('en-GB', options);
 }
 
-// Get the current date
 const currentDate = new Date();
 
-// Set the formatted date inside the h5 element
 document.getElementById('current-date').textContent = formatDate(currentDate);
