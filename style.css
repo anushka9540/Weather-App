@@ -125,30 +125,42 @@ body::before {
 
 .humiwin {
     /* border: 1px solid ; */
+    height: 90px;
+    width: 90px;
     display: flex;
-    /* justify-content: space-between; */
+    flex-direction: column;
     align-items: center;
-    gap: 240px;
+    gap: 30px;
+
 }
 
 .prefel {
     /* border: 1px solid; */
     display: flex;
-    /* justify-content: space-between; */
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 240px;
+    gap: 30px;
+    height: 90px;
+    width: 90px;
+
 }
 
 .weather-conditions-container {
     /* border: 3px solid black; */
     display: flex;
-    flex-direction: column;
-    gap: 25px;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 .condition-info {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
 
 }
 
@@ -156,6 +168,9 @@ body::before {
     display: flex;
     gap: 15px;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .forecast-item-img {
@@ -168,7 +183,7 @@ body::before {
     display: flex;
     gap: 15px;
     overflow: scroll;
-    margin-top: 20px;
+    margin-top: 15px;
     padding-bottom: 12px;
     padding-right: 12px;
 }
@@ -222,9 +237,9 @@ body::before {
 
 h4 {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 50px;
     border: 1px solid #ffffff;
-    border-radius: 30px;
+    border-radius: 50px;
     padding: 5px;
 }
 
