@@ -67,8 +67,8 @@ function processWeatherData(data) {
 
   const iconCode = data.weather[0].icon;
   weatherSummaryImg.src = iconCode
-    ? `icons/${iconCode}.png`
-    : 'icons/default.png';
+    ? `./images/icons/${iconCode}.png`
+    : './images/icons/default.png';
 
   const currentTime = data.dt + data.timezone;
   const sunrise = data.sys.sunrise + data.timezone;
@@ -105,8 +105,8 @@ function getForecast(cityName) {
       const forecastTemp = Math.round(forecast.main.temp - 273.15);
       const forecastIconCode = forecast.weather[0].icon;
       const forecastIconUrl = forecastIconCode
-        ? `icons/${forecastIconCode}.png`
-        : './icons/unknown.png';
+        ? `./images/icons/${forecastIconCode}.png`
+        : './images/icons/unknown.png';
       const forecastItem = document.createElement('div');
       forecastItem.classList.add('forecast-item');
       forecastItem.innerHTML = `
