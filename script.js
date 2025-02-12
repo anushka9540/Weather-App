@@ -75,9 +75,9 @@ function processWeatherData(data) {
   const sunset = data.sys.sunset + data.timezone;
 
   if (currentTime >= sunrise && currentTime < sunset) {
-    document.body.style.backgroundImage = "url('./images/day.jpg')";
+    document.body.style.backgroundImage = "url('./images/img/day.jpg')";
   } else {
-    document.body.style.backgroundImage = "url('./images/night.png')";
+    document.body.style.backgroundImage = "url('./images/img/night.png')";
   }
 
   getForecast(data.name);
@@ -141,7 +141,7 @@ cityInput.addEventListener('keydown', (event) => {
 });
 
 window.onload = () => {
-  document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
+  document.body.style.backgroundImage = "url('./images/img/bckgrnd.jpg')";
   weatherInfo.style.display = 'none';
   searchCityMessage.style.display = 'block';
   notFoundMessage.style.display = 'none';
