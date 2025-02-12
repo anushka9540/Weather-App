@@ -171,3 +171,14 @@ tryAgainButton.addEventListener('click', () => {
   cityInput.value = '';
   cityInput.focus();
 });
+
+function formatDate(date) {
+  const options = { weekday: 'short', day: 'numeric', month: 'short' };
+  return date.toLocaleDateString('en-GB', options);
+}
+
+// Get the current date
+const currentDate = new Date();
+
+// Set the formatted date inside the h5 element
+document.getElementById('current-date').textContent = formatDate(currentDate);
