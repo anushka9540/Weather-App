@@ -95,6 +95,7 @@ body::before {
     align-items: center;
     gap: 9px;
     margin: 0 auto;
+    margin-top: -5px;
 }
 
 .regular-text {
@@ -112,7 +113,19 @@ body::before {
     width: 120px;
     /* border: solid; */
     height: 120px;
+    position: relative;
+    top: -9px;
 
+}
+
+.pressure-value-text {
+    position: relative;
+    left: 0.8px;
+}
+
+.pre {
+    position: relative;
+    left: 0.8px;
 }
 
 .weather-summary-info {
@@ -131,17 +144,24 @@ body::before {
 
 .fa-droplet {
     position: relative;
+    left: 10px;
+}
+
+.fa-wind{
+    position: relative;
     left: 5px;
 }
 
 .wind-value-text {
     position: relative;
-    left: 22px;
+    left: 20px;
+    font-weight: 400;
 }
 
 .wnt {
     position: relative;
-    left: 22px;
+    left: 20px;
+    font-weight: 400;
 }
 
 .weather-conditions-container {
