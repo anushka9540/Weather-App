@@ -186,58 +186,10 @@ const currentDate = new Date();
 
 document.getElementById('current-date').textContent = formatDate(currentDate);
 
-
-
-
-// async function setDynamicBackground() {
-//   // Set the default background first
-//   document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
-
-//   try {
-//     const position = await new Promise((resolve, reject) => {
-//       navigator.geolocation.getCurrentPosition(resolve, reject);
-//     });
-
-//     const lat = position.coords.latitude;
-//     const lon = position.coords.longitude;
-
-//     const response = await fetch(
-//       `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`
-//     );
-//     const data = await response.json();
-
-//     const sunrise = new Date(data.results.sunrise);
-//     const sunset = new Date(data.results.sunset);
-//     const now = new Date();
-
-//     const sunriseLocal = new Date(
-//       sunrise.getTime() + new Date().getTimezoneOffset() * 60000
-//     );
-//     const sunsetLocal = new Date(
-//       sunset.getTime() + new Date().getTimezoneOffset() * 60000
-//     );
-
-//     if (now >= sunriseLocal && now < sunsetLocal) {
-//       document.body.style.backgroundImage = "url('./images/day.jpg')";
-//     } else {
-//       document.body.style.backgroundImage = "url('./images/night.png')";
-//     }
-//   } catch (error) {
-//     console.error('Error getting location or fetching data:', error);
-//     // Background remains the default `bckgrnd.jpg`
-//   }
-// }
-
-// setDynamicBackground();
-
-
-
 async function setDynamicBackground() {
-  // Set the default background first
   document.body.style.backgroundImage = "url('./images/bckgrnd.jpg')";
 
   try {
-    // Get user's location
     const position = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
@@ -245,42 +197,39 @@ async function setDynamicBackground() {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
-    // Fetch sunrise and sunset times from API
     const response = await fetch(
       `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`
     );
     const data = await response.json();
 
-    // Get the user's actual local time zone
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    // Convert sunrise and sunset UTC times to the user's local time zone
-    const sunriseLocal = new Date(data.results.sunrise).toLocaleString("en-US", { timeZone });
-    const sunsetLocal = new Date(data.results.sunset).toLocaleString("en-US", { timeZone });
-    const nowLocal = new Date().toLocaleString("en-US", { timeZone });
+    const sunriseLocal = new Date(data.results.sunrise).toLocaleString(
+      'en-US',
+      { timeZone }
+    );
+    const sunsetLocal = new Date(data.results.sunset).toLocaleString('en-US', {
+      timeZone
+    });
+    const nowLocal = new Date().toLocaleString('en-US', { timeZone });
 
-    // Convert them to Date objects for comparison
     const sunriseTime = new Date(sunriseLocal);
     const sunsetTime = new Date(sunsetLocal);
     const nowTime = new Date(nowLocal);
 
-    // Debugging: Log values to check the calculations
     console.log("User's Time Zone:", timeZone);
-    console.log("Current Time (Local):", nowTime);
-    console.log("Sunrise Time (Local):", sunriseTime);
-    console.log("Sunset Time (Local):", sunsetTime);
+    console.log('Current Time (Local):', nowTime);
+    console.log('Sunrise Time (Local):', sunriseTime);
+    console.log('Sunset Time (Local):', sunsetTime);
 
-    // Set background based on whether it's day or night
     if (nowTime >= sunriseTime && nowTime < sunsetTime) {
-      document.body.style.backgroundImage = "url('./images/day.jpg')"; // Daytime background
+      document.body.style.backgroundImage = "url('./images/day.jpg')";
     } else {
-      document.body.style.backgroundImage = "url('./images/night.png')"; // Nighttime background
+      document.body.style.backgroundImage = "url('./images/night.png')";
     }
   } catch (error) {
-    console.error("Error getting location or fetching data:", error);
-    // Background remains the default `bckgrnd.jpg`
+    console.error('Error getting location or fetching data:', error);
   }
 }
 
-// Run the function
 setDynamicBackground();
